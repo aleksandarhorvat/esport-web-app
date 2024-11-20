@@ -59,17 +59,21 @@ public class MatchController {
 
 		// Create and save the match
 		MatchId matchId = new MatchId();
-		matchId.setTeam1Id(team1.id);
-		matchId.setTeam2Id(team2.id);
+		matchId.setTeam1Id(team1.getId());
+		matchId.setTeam2Id(team2.getId());
 		Match match = new Match();
 		match.setId(matchId);
-		match.setWinningTeamId(winningTeam.id);
+		match.setWinningTeamId(winningTeam.getId());
 		match.setDuration(matchRequest.getDuration());
 		match = matchRepository.save(match);
-
+		
+		// Calculate R2 (average ELO of both teams)
+		double avgEloT1 = calculateAverageElo(team1);
+		double avgEloT2 = calculateAverageElo(team2);
+		
 		// Update player stats for both teams
-		updatePlayerStats(team1, team2, matchRequest.getDuration(), winningTeam);
-		updatePlayerStats(team2, team1, matchRequest.getDuration(), winningTeam);
+		updatePlayerStats(team1, avgEloT2, matchRequest.getDuration(), winningTeam);
+		updatePlayerStats(team2, avgEloT1, matchRequest.getDuration(), winningTeam);
 
 		// Save updated players
 		playerRepository.saveAll(team1.getPlayers());
@@ -79,7 +83,7 @@ public class MatchController {
 		return ResponseEntity.status(200).body("OK");
 	}
 
-	private void updatePlayerStats(Team team, Team opposingTeam, int duration, Team winningTeam) {
+	private void updatePlayerStats(Team team, double r2, int duration, Team winningTeam) {
 		for (Player player : team.getPlayers()) {
 			// Update hours played
 			int updatedHours = player.getHoursPlayed() + duration;
@@ -88,9 +92,6 @@ public class MatchController {
 			// Determine K value based on updated hours
 			int k = getRatingAdjustment(updatedHours);
 			player.setRatingAdjustment(k);
-
-			// Calculate R2 (average ELO of the opposing team)
-			double r2 = calculateAverageElo(opposingTeam);
 
 			// Calculate expected score (E)
 			double e = 1.0 / (1.0 + Math.pow(10.0, (r2 - player.getElo()) / 400.0));

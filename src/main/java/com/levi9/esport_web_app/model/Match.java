@@ -12,8 +12,8 @@ public class Match {
 	@EmbeddedId
 	private MatchId id;
 
-	public UUID winningTeamId;
+	private UUID winningTeamId;
 
-	public int duration;
+	private int duration;
 
 }

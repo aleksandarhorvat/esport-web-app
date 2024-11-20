@@ -15,22 +15,22 @@ import lombok.Data;
 public class Player {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public UUID id;
+	private UUID id;
 
-	public String nickname;
+	private String nickname;
 
-	public int wins;
+	private int wins;
 
-	public int losses;
+	private int losses;
 
-	public int elo;
+	private int elo;
 
-	public int hoursPlayed;
+	private int hoursPlayed;
 
 	@ManyToOne
 	@JoinColumn(name = "team_id")
-	public Team team;
+	private Team team;
 
-	public int ratingAdjustment;
+	private int ratingAdjustment;
 
 }

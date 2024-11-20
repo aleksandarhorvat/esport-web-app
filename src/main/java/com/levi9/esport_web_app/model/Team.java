@@ -17,9 +17,9 @@ import lombok.Data;
 public class Team {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public UUID id;
+	private UUID id;
 
-	public String teamName;
+	private String teamName;
 
 	@OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
 	private List<Player> players = new ArrayList<>();
