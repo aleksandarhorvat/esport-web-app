@@ -4,6 +4,9 @@ import java.util.UUID;
 
 import com.levi9.esport_web_app.model.Player;
 
+import lombok.Data;
+
+@Data
 public class PlayerResponse {
 
 	private String id;
@@ -25,38 +28,5 @@ public class PlayerResponse {
 		this.hoursPlayed = player.getHoursPlayed();
 		this.teamId = player.getTeam() != null ? player.getTeam().getId() : null;
 		this.ratingAdjustment = player.getRatingAdjustment();
-	}
-
-	// Getters and Setters
-	public String getId() {
-		return id;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public int getWins() {
-		return wins;
-	}
-
-	public int getLosses() {
-		return losses;
-	}
-
-	public int getElo() {
-		return elo;
-	}
-
-	public int getHoursPlayed() {
-		return hoursPlayed;
-	}
-
-	public UUID getTeamId() {
-		return teamId;
-	}
-
-	public Integer getRatingAdjustment() {
-		return ratingAdjustment;
 	}
 }

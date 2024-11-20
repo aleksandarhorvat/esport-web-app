@@ -66,10 +66,10 @@ public class MatchController {
 		match.setWinningTeamId(winningTeam.id);
 		match.setDuration(matchRequest.getDuration());
 		match = matchRepository.save(match);
-		
+
 		// Update player stats for both teams
-	    updatePlayerStats(team1, team2, matchRequest.getDuration(), winningTeam);
-	    updatePlayerStats(team2, team1, matchRequest.getDuration(), winningTeam);
+		updatePlayerStats(team1, team2, matchRequest.getDuration(), winningTeam);
+		updatePlayerStats(team2, team1, matchRequest.getDuration(), winningTeam);
 
 		// Save updated players
 		playerRepository.saveAll(team1.getPlayers());
@@ -78,42 +78,42 @@ public class MatchController {
 		// Return the response
 		return ResponseEntity.status(200).body("OK");
 	}
-	
+
 	private void updatePlayerStats(Team team, Team opposingTeam, int duration, Team winningTeam) {
-	    for (Player player : team.getPlayers()) {
-	        // Update hours played
-	        int updatedHours = player.getHoursPlayed() + duration;
-	        player.setHoursPlayed(updatedHours);
+		for (Player player : team.getPlayers()) {
+			// Update hours played
+			int updatedHours = player.getHoursPlayed() + duration;
+			player.setHoursPlayed(updatedHours);
 
-	        // Determine K value based on updated hours
-	        int k = getRatingAdjustment(updatedHours);
-	        player.setRatingAdjustment(k);
+			// Determine K value based on updated hours
+			int k = getRatingAdjustment(updatedHours);
+			player.setRatingAdjustment(k);
 
-	        // Calculate R2 (average ELO of the opposing team)
-	        double r2 = calculateAverageElo(opposingTeam);
+			// Calculate R2 (average ELO of the opposing team)
+			double r2 = calculateAverageElo(opposingTeam);
 
-	        // Calculate expected score (E)
-	        double e = 1.0 / (1.0 + Math.pow(10.0, (r2 - player.getElo()) / 400.0));
+			// Calculate expected score (E)
+			double e = 1.0 / (1.0 + Math.pow(10.0, (r2 - player.getElo()) / 400.0));
 
-	        // Determine actual score (S)
-	        double s = (winningTeam == null) ? 0.5 : (winningTeam.equals(team) ? 1.0 : 0.0);
+			// Determine actual score (S)
+			double s = (winningTeam == null) ? 0.5 : (winningTeam.equals(team) ? 1.0 : 0.0);
 
-	        // Update ELO
-	        double updatedElo = player.getElo() + k * (s - e);
-	        int newElo = (int) Math.round(updatedElo);
-	        player.setElo(newElo);
+			// Update ELO
+			double updatedElo = player.getElo() + k * (s - e);
+			int newElo = (int) Math.round(updatedElo);
+			player.setElo(newElo);
 
-	        // Update wins/losses
-	        if (winningTeam != null) {
-	            if (winningTeam.equals(team)) {
-	                player.setWins(player.getWins() + 1);
-	            } else {
-	                player.setLosses(player.getLosses() + 1);
-	            }
-	        }
-	    }
+			// Update wins/losses
+			if (winningTeam != null) {
+				if (winningTeam.equals(team)) {
+					player.setWins(player.getWins() + 1);
+				} else {
+					player.setLosses(player.getLosses() + 1);
+				}
+			}
+		}
 	}
-	
+
 	private double calculateAverageElo(Team team) {
 		return team.getPlayers().stream().mapToInt(Player::getElo).average().orElse(0);
 	}

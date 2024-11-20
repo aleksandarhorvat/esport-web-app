@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Data;
 
+@Data
 @Embeddable
 public class MatchId {
 	@Column(insertable = false, updatable = false)
@@ -28,22 +30,6 @@ public class MatchId {
 	@Override
 	public int hashCode() {
 		return Objects.hash(team1Id, team2Id);
-	}
-
-	public UUID getTeam1Id() {
-		return team1Id;
-	}
-
-	public void setTeam1Id(UUID team1Id) {
-		this.team1Id = team1Id;
-	}
-
-	public UUID getTeam2Id() {
-		return team2Id;
-	}
-
-	public void setTeam2Id(UUID team2Id) {
-		this.team2Id = team2Id;
 	}
 
 }

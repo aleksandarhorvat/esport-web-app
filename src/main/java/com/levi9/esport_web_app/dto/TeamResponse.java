@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import com.levi9.esport_web_app.model.Team;
 
+import lombok.Data;
+
+@Data
 public class TeamResponse {
 
 	private UUID id;
@@ -17,19 +20,6 @@ public class TeamResponse {
 		this.teamName = team.getTeamName();
 		this.players = team.getPlayers().stream().map(player -> new PlayerResponse(player)) // Ensure this is done
 				.collect(Collectors.toList());
-	}
-
-	// Getters
-	public UUID getId() {
-		return id;
-	}
-
-	public String getTeamName() {
-		return teamName;
-	}
-
-	public List<PlayerResponse> getPlayers() {
-		return players;
 	}
 
 }
