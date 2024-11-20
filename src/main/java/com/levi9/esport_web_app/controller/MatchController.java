@@ -66,11 +66,11 @@ public class MatchController {
 		match.setWinningTeamId(winningTeam.getId());
 		match.setDuration(matchRequest.getDuration());
 		match = matchRepository.save(match);
-		
+
 		// Calculate R2 (average ELO of both teams)
 		double avgEloT1 = calculateAverageElo(team1);
 		double avgEloT2 = calculateAverageElo(team2);
-		
+
 		// Update player stats for both teams
 		updatePlayerStats(team1, avgEloT2, matchRequest.getDuration(), winningTeam);
 		updatePlayerStats(team2, avgEloT1, matchRequest.getDuration(), winningTeam);
