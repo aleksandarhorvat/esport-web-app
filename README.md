@@ -30,3 +30,33 @@ I developed this application using **Eclipse Java EE IDE** because it is open so
 2. Right click on project and Run as Spring Boot App
 
 ![image](https://github.com/user-attachments/assets/8ec127df-5781-4a4a-8d71-fd7a87d9525c)
+
+3. **Set Up Lombok in Eclipse**
+
+   To enable Lombok annotations in Eclipse, follow these steps:
+
+   - **Step 1: Download Lombok**  
+     Download the Lombok jar file from this [link](https://projectlombok.org/downloads/lombok.jar).
+
+   - **Step 2: Install Lombok**  
+     1. Open a terminal or command prompt and navigate to the folder where the jar file is located.
+     2. Run the following command:  
+        ```bash
+        java -jar lombok.jar
+        ```
+     3. In the Lombok installation window:
+        - Lombok installer will find your `eclipse.exe` file or you can click **Specify Location** and locate it in your Eclipse installation folder.
+        - Click **Install/Update**.
+
+   - **Step 3: Enable Annotation Processing**  
+     Annotation processing must be activated in the project settings:
+     1. Right-click on the project in Eclipse and go to **Properties**.
+     2. Navigate to **Java Compiler → Annotation Processing**.
+     3. Check **Factory Path**.
+     4. Enable all checkboxes under this section.
+
+    ![image](https://github.com/user-attachments/assets/587fe676-6b9e-4212-8d41-3ac3b6ec0c49)
+
+
+   - **Step 4: Restart Eclipse**  
+     Restart Eclipse to ensure the changes take effect.
