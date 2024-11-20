@@ -12,7 +12,7 @@ This application is built using **Maven** and **Spring Boot**, with the followin
 
 ## Development Environment
 
-I developed this application using **Eclipse EE IDE** because it is open source and well-suited for Java development. However, you can use any IDE compatible with Spring Boot applications, such as IntelliJ IDEA or Visual Studio Code.
+I developed this application using **Eclipse Java EE IDE** because it is open source and well-suited for Java development. However, you can use any IDE compatible with Spring Boot applications, such as IntelliJ IDEA.
 
 ## How to Build and Run
 
@@ -21,7 +21,7 @@ I developed this application using **Eclipse EE IDE** because it is open source 
 3. Import the project as a Maven project.
 4. Run the Spring Boot application using the IDE's run configuration.
 
-### Instructions for Eclipse EE IDE
+### Instructions for Eclipse Java EE IDE
 
 1. Import as Existing Maven Projects
 
