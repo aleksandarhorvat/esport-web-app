@@ -2,6 +2,7 @@ package com.levi9.esport_web_app.service;
 
 import com.levi9.esport_web_app.dto.PlayerRequest;
 import com.levi9.esport_web_app.dto.PlayerResponse;
+import com.levi9.esport_web_app.mapper.PlayerMapper;
 import com.levi9.esport_web_app.model.Player;
 import com.levi9.esport_web_app.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,14 @@ public class PlayerService {
 	@Autowired
 	private PlayerRepository playerRepository;
 
+	@Autowired
+	private PlayerMapper playerMapper;
+	
 	public List<PlayerResponse> getAllPlayers() {
 		// Retrieve all players
 		List<Player> players = playerRepository.findAll();
 		// Map to response DTOs and return the list
-		return players.stream().map(PlayerResponse::new).collect(Collectors.toList());
+		return players.stream().map(playerMapper::playerToPlayerResponse).collect(Collectors.toList());
 	}
 
 	public PlayerResponse createPlayer(PlayerRequest playerRequest) {
@@ -31,26 +35,18 @@ public class PlayerService {
 		}
 
 		// Create a new Player entity
-		Player player = new Player();
-		player.setId(UUID.randomUUID()); // Generate a new UUID
-		player.setNickname(playerRequest.getNickname());
-		player.setWins(0);
-		player.setLosses(0);
-		player.setElo(0);
-		player.setHoursPlayed(0);
-		player.setTeam(null);
-		player.setRatingAdjustment(0);
+		Player player = playerMapper.playerRequestToPlayer(playerRequest);
 
 		// Save the player
 		Player savedPlayer = playerRepository.save(player);
 
 		// Return the response
-		return new PlayerResponse(savedPlayer);
+		return playerMapper.playerToPlayerResponse(savedPlayer);
 	}
 
 	public PlayerResponse getPlayerById(UUID id) {
 		Player player = playerRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Player not found."));
-		return new PlayerResponse(player);
+		return playerMapper.playerToPlayerResponse(player);
 	}
 }

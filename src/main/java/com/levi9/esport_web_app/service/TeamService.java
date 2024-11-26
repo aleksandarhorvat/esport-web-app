@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.levi9.esport_web_app.dto.TeamRequest;
 import com.levi9.esport_web_app.dto.TeamResponse;
+import com.levi9.esport_web_app.mapper.TeamMapper;
 import com.levi9.esport_web_app.model.Player;
 import com.levi9.esport_web_app.model.Team;
 import com.levi9.esport_web_app.repository.PlayerRepository;
@@ -22,7 +23,10 @@ public class TeamService {
 
 	@Autowired
 	private PlayerRepository playerRepository;
-
+	
+	@Autowired
+	private TeamMapper teamMapper;
+	
 	public TeamResponse createTeam(TeamRequest teamRequest) {
 		// Validate team name uniqueness
 		if (teamRepository.existsByTeamName(teamRequest.getTeamName())) {
@@ -48,9 +52,7 @@ public class TeamService {
 		}
 
 		// Create and save the team
-		Team team = new Team();
-		team.setId(UUID.randomUUID());
-		team.setTeamName(teamRequest.getTeamName());
+		Team team = teamMapper.teamRequestToTeam(teamRequest);
 		team = teamRepository.save(team);
 
 		// Assign the team to the players and save them
@@ -62,11 +64,11 @@ public class TeamService {
 		team.setPlayers(players);
 
 		// Return a response with the created team
-		return new TeamResponse(team);
+		return teamMapper.teamToTeamResponse(team);
 	}
 
 	public TeamResponse getTeamById(UUID id) {
 		Team team = teamRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Team not found."));
-		return new TeamResponse(team);
+		return teamMapper.teamToTeamResponse(team);
 	}
 }

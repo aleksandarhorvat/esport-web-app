@@ -1,6 +1,5 @@
 package com.levi9.esport_web_app.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +21,6 @@ public class Team {
 	private String teamName;
 
 	@OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-	private List<Player> players = new ArrayList<>();
+	private List<Player> players;
 
 }

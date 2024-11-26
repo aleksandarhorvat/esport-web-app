@@ -1,8 +1,8 @@
 package com.levi9.esport_web_app.service;
 
 import com.levi9.esport_web_app.dto.MatchRequest;
+import com.levi9.esport_web_app.mapper.MatchMapper;
 import com.levi9.esport_web_app.model.Match;
-import com.levi9.esport_web_app.model.MatchId;
 import com.levi9.esport_web_app.model.Player;
 import com.levi9.esport_web_app.model.Team;
 import com.levi9.esport_web_app.repository.MatchRepository;
@@ -22,7 +22,10 @@ public class MatchService {
 
 	@Autowired
 	private PlayerRepository playerRepository;
-
+	
+	@Autowired
+	MatchMapper matchMapper;
+	
 	public String addMatch(MatchRequest matchRequest) {
 		// Validate duration
 		if (matchRequest.getDuration() < 1) {
@@ -46,13 +49,7 @@ public class MatchService {
 		}
 
 		// Create and save the match
-		MatchId matchId = new MatchId();
-		matchId.setTeam1Id(team1.getId());
-		matchId.setTeam2Id(team2.getId());
-		Match match = new Match();
-		match.setId(matchId);
-		match.setWinningTeamId(winningTeam != null ? winningTeam.getId() : null);
-		match.setDuration(matchRequest.getDuration());
+		Match match = matchMapper.matchRequestToMatch(matchRequest);
 		match = matchRepository.save(match);
 
 		// Calculate R2 (average ELO of both teams)
